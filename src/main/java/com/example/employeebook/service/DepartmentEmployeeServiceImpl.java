@@ -1,5 +1,6 @@
 package com.example.employeebook.service;
 
+import com.example.employeebook.exception.EmployeeNotFoundException;
 import com.example.employeebook.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,16 +21,19 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
         this.employeeService = employeeService;
     }
 
+
     @Override
     public Employee getMaxSalaryEmployeeByDepartmentId(int departmentID) {
         return getAllEmployeesByDepartmentId(departmentID).stream()
-                .max(Comparator.comparingLong(Employee::getSalary)).orElse(null);
+                .max(Comparator.comparingLong(Employee::getSalary))
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee with departmentId " + departmentID + " not found."));
     }
 
     @Override
     public Employee getMinSalaryEmployeeByDepartmentId(int departmentID) {
         return getAllEmployeesByDepartmentId(departmentID).stream()
-                .min(Comparator.comparingLong(Employee::getSalary)).orElse(null);
+                .min(Comparator.comparingLong(Employee::getSalary))
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee with departmentId " + departmentID + " not found."));
     }
 
     @Override
