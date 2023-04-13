@@ -1,11 +1,11 @@
-package com.example.employeeBook.exception;
+package com.example.employeebook.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-public class EmployeeStorageIsFullException extends RuntimeException {
-    public EmployeeStorageIsFullException(String message) {
+public class EmployeeAlreadyAddedException extends RuntimeException {
+        public EmployeeAlreadyAddedException(String message) {
         super(message);
     }
 }
