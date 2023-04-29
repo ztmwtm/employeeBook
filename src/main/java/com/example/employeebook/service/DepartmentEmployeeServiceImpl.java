@@ -42,7 +42,7 @@ public class DepartmentEmployeeServiceImpl implements DepartmentEmployeeService 
     }
 
     @Override
-    public Map<Integer, List<Employee>> getAllEmployeesGroupByDepartmentId() {
+    public Map<Integer, List<Employee>> getAllEmployeesGroupByDepartmentId()  {
         return employeeService.getAllEmployees().stream()
                 .collect(Collectors.groupingBy(Employee::getDepartmentID));
     }

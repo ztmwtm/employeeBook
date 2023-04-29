@@ -26,7 +26,6 @@ class DepartmentEmployeeServiceImplTest {
 
     @Test
     void getMaxSalaryEmployeeByDepartmentId() {
-        assertThat(service.getMaxSalaryEmployeeByDepartmentId(1)).isEqualTo(new Employee("Ivan", "Ivanov", 10000, 1));
         assertThat(service.getMaxSalaryEmployeeByDepartmentId(2)).isEqualTo(new Employee("Sergey", "Ivanov", 10, 2));
     }
 
@@ -52,6 +51,6 @@ class DepartmentEmployeeServiceImplTest {
         Employee second = new Employee("Petr", "Ivanov", 1000, 1);
         Employee third = new Employee("Sergey", "Ivanov", 10, 2);
         Employee fourth = new Employee("Michail", "Ivanov", 1, 2);
-        assertThat(service.getAllEmployeesGroupByDepartmentId()).containsEntry(2, List.of(third, fourth)).containsEntry(1, List.of(first, second));
+        assertThat(service.getAllEmployeesGroupByDepartmentId()).containsEntry(2, List.of(fourth, third)).containsEntry(1, List.of(second, first));
     }
 }

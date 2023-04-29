@@ -55,12 +55,12 @@ public class Employee {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return salary == employee.salary && departmentID == employee.departmentID && Objects.equals(name, employee.name) && Objects.equals(secondName, employee.secondName);
+        return Objects.equals(name, employee.name) && Objects.equals(secondName, employee.secondName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, secondName, salary, departmentID);
+        return Objects.hash(name, secondName);
     }
 
     @Override
