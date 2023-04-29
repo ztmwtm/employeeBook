@@ -18,7 +18,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee addEmployee(String name, String secondName, long salary, int departmentID) {
-        Employee employee = new Employee(name, secondName, salary, departmentID);
+        Employee employee = new Employee(EmployeeUtils.validateString(name),
+                                        EmployeeUtils.validateString(secondName), salary, departmentID);
         if (employees.containsKey(employee.getStringKey())) {
             String cause = String.format("Employee with name %s and second name %s is already added.", name, secondName);
             throw new EmployeeAlreadyAddedException(cause);
@@ -29,14 +30,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee removeEmployee(String name, String secondName) {
-        Employee employee = findEmployee(name, secondName);
+        Employee employee = findEmployee(EmployeeUtils.validateString(name),
+                EmployeeUtils.validateString(secondName));
         employees.remove(employee.getStringKey());
         return employee;
     }
 
     @Override
     public Employee findEmployee(String name, String secondName) {
-        Employee employee = employees.get(name.concat(secondName));
+        Employee employee = employees.get(EmployeeUtils.validateString(name)
+                                            .concat(EmployeeUtils.validateString(secondName)));
         if (Objects.isNull(employee)) {
             String cause = String.format("Employee with name %s and second name %s isn't found.", name, secondName);
             throw new EmployeeNotFoundException(cause);

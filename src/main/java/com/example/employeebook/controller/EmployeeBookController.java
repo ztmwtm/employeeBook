@@ -20,22 +20,22 @@ public class EmployeeBookController {
     }
 
     @GetMapping(path = "/add")
-    public Employee addEmployee(@RequestParam(required = true, name = "firstName") String name,
-                              @RequestParam(required = true, name = "lastName") String secondName,
-                                @RequestParam(required = true, name = "salary") long salary,
-                                @RequestParam(required = true, name = "departmentID") int departmentID) {
+    public Employee addEmployee(@RequestParam("firstName") String name,
+                              @RequestParam("lastName") String secondName,
+                                @RequestParam("salary") long salary,
+                                @RequestParam("departmentID") int departmentID) {
         return employeeService.addEmployee(name, secondName, salary, departmentID);
     }
 
     @GetMapping(path = "/remove")
-    public Employee removeEmployee(@RequestParam(required = true, name = "firstName") String name,
-                              @RequestParam(required = true, name = "lastName") String secondName) {
+    public Employee removeEmployee(@RequestParam("firstName") String name,
+                              @RequestParam("lastName") String secondName) {
         return employeeService.removeEmployee(name, secondName);
     }
 
     @GetMapping(path = "/find")
-    public Employee findEmployee(@RequestParam(required = true, name = "firstName") String name,
-                              @RequestParam(required = true, name = "lastName") String secondName) {
+    public Employee findEmployee(@RequestParam("firstName") String name,
+                              @RequestParam("lastName") String secondName) {
         return employeeService.findEmployee(name, secondName);
     }
 
