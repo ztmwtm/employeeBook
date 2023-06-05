@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -26,8 +27,8 @@ class DepartmentServiceImplTest {
 
     @Mock
     EmployeeService employeeServiceMock;
-
-    private DepartmentService departmentService;
+    @InjectMocks
+    private DepartmentServiceImpl departmentService;
     private final List<Employee> employees = new ArrayList<>();
 
     @BeforeEach
