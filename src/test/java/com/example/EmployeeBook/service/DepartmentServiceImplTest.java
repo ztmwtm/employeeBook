@@ -2,7 +2,6 @@ package com.example.EmployeeBook.service;
 
 import com.example.employeebook.exception.DepartmentNotFoundException;
 import com.example.employeebook.model.Employee;
-import com.example.employeebook.service.DepartmentService;
 import com.example.employeebook.service.DepartmentServiceImpl;
 import com.example.employeebook.service.EmployeeService;
 import org.jetbrains.annotations.NotNull;
@@ -28,12 +27,13 @@ class DepartmentServiceImplTest {
     @Mock
     EmployeeService employeeServiceMock;
     @InjectMocks
-    private DepartmentServiceImpl departmentService;
+    private DepartmentServiceImpl departmentServiceImpl;
     private final List<Employee> employees = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
-        departmentService = new DepartmentServiceImpl(employeeServiceMock);
+        departmentServiceImpl = new DepartmentServiceImpl(employeeServiceMock);
+        Mockito.when(employeeServiceMock.getAllEmployees()).thenReturn(employees);
         employees.add(new Employee("Ivan", "Ivanov", 10000, 1));
         employees.add(new Employee("Petr", "Petrov", 12345, 2));
         employees.add(new Employee("Sidr", "Sidorov", 200000, 3));
@@ -91,9 +91,8 @@ class DepartmentServiceImplTest {
     @ParameterizedTest
     @MethodSource("provideParamsForEmployeesByDepartmentIdTest")
     void getEmployeesByDepartmentId(int departmentId, List<Employee> employeesParam) {
-        Mockito.when(employeeServiceMock.getAllEmployees()).thenReturn(employees);
 
-        assertThat(departmentService.getEmployeesByDepartmentId(departmentId)).isEqualTo(employeesParam);
+        assertThat(departmentServiceImpl.getEmployeesByDepartmentId(departmentId)).isEqualTo(employeesParam);
 
         Mockito.verify(employeeServiceMock).getAllEmployees();
     }
@@ -101,9 +100,7 @@ class DepartmentServiceImplTest {
     @ParameterizedTest
     @MethodSource("provideParamsForSalarySumByDepartmentIdTest")
     void getSalarySumByDepartmentId(int departmentId, double salarySum) {
-        Mockito.when(employeeServiceMock.getAllEmployees()).thenReturn(employees);
-
-        assertThat(departmentService.getSalarySumByDepartmentId(departmentId)).isEqualTo(salarySum);
+        assertThat(departmentServiceImpl.getSalarySumByDepartmentId(departmentId)).isEqualTo(salarySum);
 
         Mockito.verify(employeeServiceMock).getAllEmployees();
     }
@@ -111,9 +108,7 @@ class DepartmentServiceImplTest {
     @ParameterizedTest
     @MethodSource("provideParamsForMaxSalaryTest")
     void getMaxSalaryByDepartmentId(int departmentId, double salary) {
-        Mockito.when(employeeServiceMock.getAllEmployees()).thenReturn(employees);
-
-        assertThat(departmentService.getMaxSalaryByDepartmentId(departmentId)).isEqualTo(salary);
+        assertThat(departmentServiceImpl.getMaxSalaryByDepartmentId(departmentId)).isEqualTo(salary);
 
         Mockito.verify(employeeServiceMock).getAllEmployees();
     }
@@ -121,20 +116,16 @@ class DepartmentServiceImplTest {
     @ParameterizedTest
     @MethodSource("provideParamsForMinSalaryTest")
     void getMinSalaryByDepartmentId(int departmentId, double salary) {
-        Mockito.when(employeeServiceMock.getAllEmployees()).thenReturn(employees);
-
-        assertThat(departmentService.getMinSalaryByDepartmentId(departmentId)).isEqualTo(salary);
+        assertThat(departmentServiceImpl.getMinSalaryByDepartmentId(departmentId)).isEqualTo(salary);
 
         Mockito.verify(employeeServiceMock).getAllEmployees();
     }
 
     @Test
     void getMinSalaryByDepartmentIdWithNonExcitedIdThenException() {
-        Mockito.when(employeeServiceMock.getAllEmployees()).thenReturn(employees);
-
         int departmentId = 0;
 
-        assertThatThrownBy(() -> departmentService.getMinSalaryByDepartmentId(departmentId))
+        assertThatThrownBy(() -> departmentServiceImpl.getMinSalaryByDepartmentId(departmentId))
                 .isInstanceOf(DepartmentNotFoundException.class)
                 .hasMessageContaining(String.format("Department with %s id not found", departmentId));
 
@@ -143,11 +134,9 @@ class DepartmentServiceImplTest {
 
     @Test
     void getMaxSalaryByDepartmentIdWithNonExcitedIdThenException() {
-        Mockito.when(employeeServiceMock.getAllEmployees()).thenReturn(employees);
-
         int departmentId = 0;
 
-        assertThatThrownBy(() -> departmentService.getMaxSalaryByDepartmentId(departmentId))
+        assertThatThrownBy(() -> departmentServiceImpl.getMaxSalaryByDepartmentId(departmentId))
                 .isInstanceOf(DepartmentNotFoundException.class)
                 .hasMessageContaining(String.format("Department with %s id not found", departmentId));
 
@@ -156,18 +145,15 @@ class DepartmentServiceImplTest {
 
     @Test
     void getSalarySumByDepartmentIdWithNonExcitedIdThenException() {
-        Mockito.when(employeeServiceMock.getAllEmployees()).thenReturn(employees);
-
         int departmentId = 0;
 
-        assertThat(departmentService.getSalarySumByDepartmentId(departmentId)).isZero();
+        assertThat(departmentServiceImpl.getSalarySumByDepartmentId(departmentId)).isZero();
 
         Mockito.verify(employeeServiceMock).getAllEmployees();
     }
 
     @Test
     void getAllEmployeesOrderedById() {
-        Mockito.when(employeeServiceMock.getAllEmployees()).thenReturn(employees);
         Map<Integer, List<Employee>> expectedMap = new HashMap<>();
         for (Employee value : employees) {
             List<Employee> currentList = expectedMap.get(value.getDepartmentID());
@@ -180,11 +166,10 @@ class DepartmentServiceImplTest {
             }
         }
 
-        Map<Integer, List<Employee>> resultMap = departmentService.getAllEmployeesOrderedById();
+        Map<Integer, List<Employee>> resultMap = departmentServiceImpl.getAllEmployeesOrderedById();
 
         assertThat(expectedMap).isEqualTo(resultMap);
 
         Mockito.verify(employeeServiceMock).getAllEmployees();
-
     }
 }
